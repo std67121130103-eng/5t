@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Settings ⚙️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+color:white;
+overflow:hidden;
+}
+
+/* loading */
+
+.loader{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000814;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:9999;
+}
+
+.spinner{
+width:70px;
+height:70px;
+border:6px solid rgba(255,255,255,0.2);
+border-top:6px solid cyan;
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+to{transform:rotate(360deg)}
+}
+
+/* video background */
+
+.bg-video{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-3;
+}
+
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,50,0.8));
+z-index:-2;
+}
+
+/* header */
+
+header{
+text-align:center;
+font-size:40px;
+padding:35px;
+text-shadow:0 0 20px cyan;
+}
+
+/* back button */
+
+.home-btn{
+position:fixed;
+top:20px;
+left:20px;
+padding:10px 20px;
+border:none;
+border-radius:20px;
+background:rgba(255,255,255,0.2);
+backdrop-filter:blur(10px);
+color:white;
+cursor:pointer;
+}
+
+/* settings box */
+
+.settings{
+
+width:400px;
+margin:auto;
+margin-top:40px;
+
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(15px);
+
+border-radius:25px;
+
+padding:30px;
+
+box-shadow:0 0 40px rgba(0,200,255,0.3);
+
+}
+
+.setting{
+margin:20px 0;
+}
+
+.setting label{
+display:block;
+margin-bottom:8px;
+}
+
+.setting input{
+width:100%;
+}
+
+/* toggle */
+
+.toggle{
+padding:10px 20px;
+border:none;
+border-radius:20px;
+background:linear-gradient(45deg,#00eaff,#008cff);
+color:white;
+cursor:pointer;
+}
+
+/* whale */
+
+.whale{
+position:absolute;
+top:65%;
+left:-250px;
+font-size:80px;
+animation:swim 22s linear infinite;
+}
+
+@keyframes swim{
+0%{left:-250px}
+100%{left:110%}
+}
+
+/* bubbles */
+
+.bubble{
+position:absolute;
+bottom:-40px;
+width:10px;
+height:10px;
+background:white;
+border-radius:50%;
+animation:bubbleUp linear forwards;
+}
+
+@keyframes bubbleUp{
+0%{transform:translateY(0)}
+100%{transform:translateY(-120vh)}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="loader" id="loader">
+<div class="spinner"></div>
+<p>กำลังโหลดการตั้งค่า...</p>
+</div>
+
+<video class="bg-video" id="bgVideo" autoplay muted loop>
+<source src="sea.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<button class="home-btn" onclick="goHome()">🏠 Home</button>
+
+<div class="whale">🐳</div>
+
+<header>⚙️ ตั้งค่า</header>
+
+<div class="settings">
+
+<div class="setting">
+<label>🎚 ปรับเสียงเพลง</label>
+<input type="range" min="0" max="1" step="0.01" value="0.8" onchange="volume(this.value)">
+</div>
+
+<div class="setting">
+<label>🎥 วิดีโอพื้นหลัง</label>
+<button class="toggle" onclick="toggleVideo()">เปิด / ปิด</button>
+</div>
+
+<div class="setting">
+<label>🌙 โหมดมืด</label>
+<button class="toggle" onclick="darkMode()">สลับโหมด</button>
+</div>
+
+</div>
+
+<script>
+
+/* loading */
+
+window.onload=function(){
+
+setTimeout(()=>{
+document.getElementById("loader").style.display="none"
+},1200)
+
+}
+
+/* home */
+
+function goHome(){
+
+window.location.href="home.html"
+
+}
+
+/* volume */
+
+function volume(v){
+
+let audio=document.querySelector("audio")
+if(audio){
+audio.volume=v
+}
+
+}
+
+/* video toggle */
+
+function toggleVideo(){
+
+let v=document.getElementById("bgVideo")
+
+if(v.style.display=="none"){
+v.style.display="block"
+}else{
+v.style.display="none"
+}
+
+}
+
+/* dark mode */
+
+function darkMode(){
+
+document.body.classList.toggle("dark")
+
+}
+
+/* bubbles */
+
+function bubble(){
+
+let b=document.createElement("div")
+
+b.className="bubble"
+
+b.style.left=Math.random()*window.innerWidth+"px"
+b.style.animationDuration=4+Math.random()*3+"s"
+
+document.body.appendChild(b)
+
+setTimeout(()=>{
+b.remove()
+},7000)
+
+}
+
+setInterval(bubble,400)
+
+</script>
+
+</body>
+</html>

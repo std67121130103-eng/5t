@@ -1,0 +1,297 @@
+```html
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ocean World</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:sans-serif;
+}
+
+body{
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+background:#001a2d;
+}
+
+/* วิดีโอพื้นหลัง */
+
+.bg-video{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-2;
+}
+
+/* overlay */
+
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.3);
+z-index:-1;
+}
+
+/* กล่องกระจก */
+
+.glass-box{
+
+width:420px;
+padding:50px;
+text-align:center;
+
+background:rgba(255,255,255,0.15);
+
+border-radius:25px;
+
+backdrop-filter:blur(15px);
+
+border:1px solid rgba(255,255,255,0.3);
+
+box-shadow:
+0 0 40px rgba(0,200,255,0.4),
+inset 0 0 20px rgba(255,255,255,0.3);
+
+animation:floatBox 6s ease-in-out infinite;
+}
+
+@keyframes floatBox{
+0%{transform:translateY(0)}
+50%{transform:translateY(-15px)}
+100%{transform:translateY(0)}
+}
+
+h1{
+font-size:45px;
+margin-bottom:15px;
+text-shadow:0 0 20px cyan;
+}
+
+p{
+font-size:18px;
+margin-bottom:30px;
+}
+
+button{
+padding:14px 40px;
+font-size:18px;
+border:none;
+border-radius:30px;
+cursor:pointer;
+
+background:linear-gradient(45deg,#00eaff,#008cff);
+color:white;
+
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.1);
+box-shadow:0 0 20px cyan;
+}
+
+/* ฟองอากาศ */
+
+.bubble{
+position:absolute;
+bottom:-40px;
+width:12px;
+height:12px;
+border-radius:50%;
+background:white;
+opacity:0.8;
+animation:bubbleUp linear forwards;
+}
+
+@keyframes bubbleUp{
+0%{transform:translateY(0)}
+100%{transform:translateY(-110vh)}
+}
+
+/* วาฬ */
+
+.whale{
+position:absolute;
+top:55%;
+left:-200px;
+font-size:100px;
+animation:whaleSwim 25s linear infinite;
+}
+
+@keyframes whaleSwim{
+0%{left:-200px}
+100%{left:110%}
+}
+
+/* เอฟเฟกเปลี่ยนหน้า */
+
+.dive{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#001a2d;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+opacity:0;
+pointer-events:none;
+z-index:100;
+}
+
+.dive.active{
+opacity:1;
+pointer-events:auto;
+animation:diveDown 3s forwards;
+}
+
+@keyframes diveDown{
+0%{transform:translateY(0)}
+100%{transform:translateY(120px) scale(1.1)}
+}
+
+/* ฟองตอนโหลด */
+
+.dive-bubble{
+position:absolute;
+width:14px;
+height:14px;
+background:white;
+border-radius:50%;
+opacity:0.9;
+animation:diveBubble 4s linear infinite;
+}
+
+@keyframes diveBubble{
+0%{transform:translateY(0)}
+100%{transform:translateY(-120vh)}
+}
+
+/* วาฬตอนเปลี่ยนหน้า */
+
+.dive-whale{
+font-size:120px;
+position:absolute;
+top:55%;
+left:-300px;
+animation:whaleDive 6s linear forwards;
+}
+
+@keyframes whaleDive{
+0%{left:-300px}
+100%{left:120%}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- วิดีโอทะเล -->
+
+<video class="bg-video" autoplay muted loop playsinline>
+<source src="sea.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<div class="whale">🐳</div>
+
+<div class="glass-box">
+
+<h1>🌊 Ocean World</h1>
+
+<p>ยินดีต้อนรับสู่โลกใต้ทะเล</p>
+
+<button onclick="goLogin()">
+เข้าสู่ระบบ
+</button>
+
+</div>
+
+<!-- เอฟเฟกดำน้ำ -->
+
+<div class="dive" id="diveEffect">
+
+<div class="dive-whale">🐳</div>
+
+<h1 style="margin-top:140px;">กำลังดำน้ำไปหน้า Login...</h1>
+
+</div>
+
+<script>
+
+/* ฟองอากาศพื้นหลัง */
+
+function bubble(){
+
+let b=document.createElement("div");
+b.className="bubble";
+
+b.style.left=Math.random()*window.innerWidth+"px";
+b.style.animationDuration=4+Math.random()*3+"s";
+
+document.body.appendChild(b);
+
+setTimeout(()=>{
+b.remove();
+},7000);
+
+}
+
+setInterval(bubble,400);
+
+/* ไปหน้า login */
+
+function goLogin(){
+
+let dive=document.getElementById("diveEffect");
+
+dive.classList.add("active");
+
+/* ฟองตอนเปลี่ยนหน้า */
+
+for(let i=0;i<80;i++){
+
+let b=document.createElement("div");
+b.className="dive-bubble";
+
+b.style.left=Math.random()*window.innerWidth+"px";
+b.style.bottom="-20px";
+b.style.animationDuration=(2+Math.random()*3)+"s";
+
+dive.appendChild(b);
+
+}
+
+/* ไปหน้า login */
+
+setTimeout(()=>{
+window.location.href="wel.html";
+},3000);
+
+}
+
+</script>
+
+</body>
+</html>
+```
