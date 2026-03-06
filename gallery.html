@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ocean Gallery 📸</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+color:white;
+background:black;
+overflow-x:hidden;
+}
+
+/* VIDEO BACKGROUND */
+
+.bg-video{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-3;
+}
+
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,70,0.9));
+z-index:-2;
+}
+
+/* LOADER */
+
+.loader{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:9999;
+}
+
+.spinner{
+width:80px;
+height:80px;
+border:8px solid rgba(255,255,255,0.2);
+border-top:8px solid cyan;
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+to{transform:rotate(360deg)}
+}
+
+.loader p{
+margin-top:20px;
+font-size:20px;
+}
+
+/* HEADER */
+
+header{
+text-align:center;
+font-size:40px;
+padding:35px;
+text-shadow:0 0 20px cyan;
+}
+
+/* INSTAGRAM FEED */
+
+.feed{
+max-width:600px;
+margin:auto;
+padding-bottom:100px;
+}
+
+/* POST */
+
+.post{
+
+background:rgba(255,255,255,0.08);
+
+backdrop-filter:blur(15px);
+
+border-radius:20px;
+
+overflow:hidden;
+
+margin:30px 20px;
+
+box-shadow:0 10px 30px rgba(0,0,0,0.8);
+
+animation:fadeUp 1s ease;
+
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(40px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* image */
+
+.post img{
+
+width:100%;
+
+display:block;
+
+}
+
+/* caption */
+
+.caption{
+
+padding:15px;
+
+font-size:16px;
+
+}
+
+/* like bar */
+
+.actions{
+
+display:flex;
+
+gap:15px;
+
+padding:10px 15px;
+
+font-size:22px;
+
+}
+
+/* bubble */
+
+.bubble{
+
+position:absolute;
+
+bottom:-50px;
+
+width:10px;
+
+height:10px;
+
+background:white;
+
+border-radius:50%;
+
+opacity:0.7;
+
+animation:bubbleUp linear forwards;
+
+}
+
+@keyframes bubbleUp{
+
+0%{transform:translateY(0)}
+
+100%{transform:translateY(-120vh)}
+
+}
+
+/* viewer */
+
+.viewer{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100%;
+
+background:rgba(0,0,0,0.9);
+
+display:none;
+
+justify-content:center;
+
+align-items:center;
+
+z-index:999;
+
+}
+
+.viewer img{
+
+max-width:90%;
+
+max-height:90%;
+
+border-radius:15px;
+
+}
+
+/* back */
+
+.back{
+
+position:fixed;
+
+top:20px;
+
+left:20px;
+
+padding:12px 25px;
+
+border:none;
+
+border-radius:30px;
+
+background:rgba(255,255,255,0.2);
+
+color:white;
+
+cursor:pointer;
+
+backdrop-filter:blur(10px);
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOADER -->
+
+<div class="loader" id="loader">
+
+<div class="spinner"></div>
+
+<p>กำลังโหลดแกลเลอรี่...</p>
+
+</div>
+
+<!-- VIDEO -->
+
+<video class="bg-video" autoplay muted loop>
+
+<source src="sea.mp4" type="video/mp4">
+
+</video>
+
+<div class="overlay"></div>
+
+<button class="back" onclick="back()">← กลับ</button>
+
+<header>📸 ขอให้ทะเลใจดีกับ🐭</header>
+
+<div class="feed">
+
+<div class="post" onclick="view(this)">
+<img src="cinnamoroll-sanrio.jpg" width="600">
+<div class="actions">❤️ 💬 📤</div>
+<div class="caption"> innamoroll-sanrio🌊</div>
+</div>
+
+<div class="post" onclick="view(this)">
+<img src="cinnamoroll5k.png" width="600">
+<div class="actions">❤️ 💬 📤</div>
+<div class="caption">cinnamoroll-5k 🌅</div>
+</div>
+
+<div class="post" onclick="view(this)">
+<img src="rr.jpg" width="600">
+<div class="actions">❤️ 💬 📤</div>
+<div class="caption">i love you 💎</div>
+</div>
+
+<div class="post" onclick="view(this)">
+<img src="tt.jpg" width="600">
+<div class="actions">❤️ 💬 📤</div>
+<div class="caption">อ้วนนครับ 🐠</div>
+</div>
+
+</div>
+
+<!-- VIEWER -->
+
+<div class="viewer" id="viewer" onclick="closeView()">
+<img id="bigImg">
+</div>
+
+<script>
+
+/* loader */
+
+window.onload=function(){
+
+setTimeout(()=>{
+
+document.getElementById("loader").style.display="none"
+
+},1500)
+
+}
+
+/* bubble */
+
+function bubble(){
+
+let b=document.createElement("div")
+
+b.className="bubble"
+
+b.style.left=Math.random()*window.innerWidth+"px"
+
+b.style.animationDuration=4+Math.random()*3+"s"
+
+document.body.appendChild(b)
+
+setTimeout(()=>{
+
+b.remove()
+
+},7000)
+
+}
+
+setInterval(bubble,400)
+
+/* view */
+
+function view(el){
+
+let src=el.querySelector("img").src
+
+document.getElementById("viewer").style.display="flex"
+
+document.getElementById("bigImg").src=src
+
+}
+
+function closeView(){
+
+document.getElementById("viewer").style.display="none"
+
+}
+
+/* back */
+
+function back(){
+
+window.location.href="home.html"
+
+}
+
+</script>
+
+</body>
+</html>
