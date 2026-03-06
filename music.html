@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ocean Music</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+color:white;
+overflow-x:hidden;
+}
+
+/* ================= LOADING ================= */
+
+.loader{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000814;
+
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+
+z-index:9999;
+}
+
+.spinner{
+
+width:80px;
+height:80px;
+
+border:6px solid rgba(255,255,255,0.2);
+border-top:6px solid cyan;
+
+border-radius:50%;
+
+animation:spin 1s linear infinite;
+
+}
+
+.loader p{
+margin-top:20px;
+font-size:20px;
+}
+
+@keyframes spin{
+to{transform:rotate(360deg)}
+}
+
+/* ================= VIDEO ================= */
+
+.bg-video{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-3;
+}
+
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,50,0.8));
+z-index:-2;
+}
+
+/* ================= HEADER ================= */
+
+header{
+text-align:center;
+font-size:40px;
+padding:35px;
+text-shadow:0 0 20px cyan;
+}
+
+/* ================= HOME BUTTON ================= */
+
+.home-btn{
+
+position:fixed;
+
+top:20px;
+left:20px;
+
+padding:10px 20px;
+
+border:none;
+
+border-radius:20px;
+
+background:rgba(255,255,255,0.2);
+
+backdrop-filter:blur(10px);
+
+color:white;
+
+cursor:pointer;
+
+}
+
+/* ================= SONG GRID ================= */
+
+.songs{
+
+max-width:1000px;
+margin:auto;
+padding:20px;
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+
+}
+
+.song{
+
+background:rgba(255,255,255,0.08);
+
+backdrop-filter:blur(15px);
+
+padding:15px;
+
+border-radius:20px;
+
+cursor:pointer;
+
+transition:0.3s;
+
+}
+
+.song:hover{
+
+transform:scale(1.05);
+box-shadow:0 0 20px cyan;
+
+}
+
+.song img{
+
+width:100%;
+border-radius:15px;
+margin-bottom:10px;
+
+}
+
+/* เพิ่มให้วิดีโอในการ์ด */
+
+.song video{
+
+width:100%;
+border-radius:15px;
+margin-bottom:10px;
+object-fit:cover;
+
+}
+
+/* ================= PLAYER PAGE ================= */
+
+.player-page{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+
+background:rgba(0,0,0,0.85);
+
+display:none;
+
+flex-direction:column;
+justify-content:center;
+align-items:center;
+
+z-index:10;
+
+}
+
+/* COVER */
+
+.cover{
+
+width:320px;
+height:320px;
+
+border-radius:20px;
+
+background-size:cover;
+background-position:center;
+
+margin-bottom:25px;
+
+box-shadow:0 0 40px rgba(0,255,255,0.5);
+
+}
+
+/* เพิ่มวิดีโอหน้าปก */
+
+.coverVideo{
+
+position:absolute;
+width:320px;
+height:320px;
+border-radius:20px;
+object-fit:cover;
+box-shadow:0 0 40px rgba(0,255,255,0.5);
+
+}
+
+/* CD */
+
+.cd{
+
+width:120px;
+height:120px;
+
+border-radius:50%;
+
+background-size:cover;
+background-position:center;
+
+border:5px solid rgba(255,255,255,0.4);
+
+margin-top:-80px;
+
+animation:spinCD 5s linear infinite;
+animation-play-state:paused;
+
+}
+
+@keyframes spinCD{
+
+from{transform:rotate(0)}
+to{transform:rotate(360deg)}
+
+}
+
+/* PLAYER CONTROLS */
+
+.controls{
+
+width:350px;
+
+text-align:center;
+
+}
+
+.controls button{
+
+padding:10px 20px;
+
+border:none;
+
+border-radius:20px;
+
+background:linear-gradient(45deg,#00eaff,#008cff);
+
+color:white;
+
+cursor:pointer;
+
+margin:10px;
+
+}
+
+/* PROGRESS */
+
+.progress{
+
+width:100%;
+margin-top:10px;
+
+}
+
+/* VOLUME */
+
+.volume{
+
+width:100%;
+margin-top:10px;
+
+}
+
+/* BACK BUTTON */
+
+.back{
+
+position:absolute;
+
+top:30px;
+left:30px;
+
+padding:10px 20px;
+
+border:none;
+
+border-radius:20px;
+
+background:rgba(255,255,255,0.2);
+
+color:white;
+
+cursor:pointer;
+
+}
+
+/* whale */
+
+.whale{
+
+position:absolute;
+
+top:65%;
+
+left:-250px;
+
+font-size:80px;
+
+animation:swim 22s linear infinite;
+
+}
+
+@keyframes swim{
+
+0%{left:-250px}
+100%{left:110%}
+
+}
+
+/* bubbles */
+
+.bubble{
+
+position:absolute;
+
+bottom:-40px;
+
+width:10px;
+
+height:10px;
+
+background:white;
+
+border-radius:50%;
+
+animation:bubbleUp linear forwards;
+
+}
+
+@keyframes bubbleUp{
+
+0%{transform:translateY(0)}
+100%{transform:translateY(-120vh)}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="loader" id="loader">
+<div class="spinner"></div>
+<p>กำลังโหลดเพลง... 🎧</p>
+</div>
+
+<button class="home-btn" onclick="goHome()">🏠 Home</button>
+
+<video class="bg-video" autoplay muted loop>
+<source src="3.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<div class="whale">🐳</div>
+
+<header>🎧 Ocean Music</header>
+
+<!-- SONG LIST -->
+
+<div class="songs">
+
+<div class="song" onclick="openSong('song1.mp3',',ต่อจากนี้เพลงรักทุกเพลงจะเป็นของเธอเท่านั้น')">
+<video autoplay muted loop>
+<source src="2.mp4" type="video/mp4">
+</video>
+<h3>🌊 ต่อจากนี้เพลงรักทุกเพลงจะเป็นของเธอเท่านั้น</h3>
+</div>
+
+<div class="song" onclick="openSong('song2.mp3','','พบรัก❤️')">
+<video autoplay muted loop>
+<source src="5.mp4" type="video/mp4">
+</video>
+<h3>🐚 พบรัก❤️</h3>
+</div>
+
+<div class="song" onclick="openSong('song3.mp3','','คัสตาส์')">
+<video autoplay muted loop>
+<source src="4.mp4" type="video/mp4">
+</video>
+<h3>🐬 คัสตาส์</h3>
+</div>
+
+</div>
+
+<!-- PLAYER -->
+
+<div class="player-page" id="playerPage">
+
+<button class="back" onclick="back()">⬅ กลับ</button>
+
+<div class="cover" id="cover"></div>
+
+<!-- เพิ่มวิดีโอหน้าปก -->
+<video class="coverVideo" id="coverVideo" autoplay muted loop></video>
+
+<div class="cd" id="cd"></div>
+
+<div class="controls">
+
+<h2 id="title"></h2>
+
+<button onclick="toggle()">▶️ / ⏸</button>
+
+<input type="range" id="progress" class="progress" value="0">
+
+<input type="range" class="volume" min="0" max="1" step="0.01" value="0.8" onchange="volume(this.value)">
+
+</div>
+
+</div>
+
+<audio id="audio"></audio>
+
+<script>
+
+window.onload=function(){
+setTimeout(()=>{
+document.getElementById("loader").style.display="none"
+},1500)
+}
+
+function goHome(){
+window.location.href="home.html"
+}
+
+let audio=document.getElementById("audio")
+let progress=document.getElementById("progress")
+let cd=document.getElementById("cd")
+
+function openSong(song,cover,title){
+
+document.getElementById("playerPage").style.display="flex"
+
+document.getElementById("cover").style.backgroundImage="url("+cover+")"
+cd.style.backgroundImage="url("+cover+")"
+
+document.getElementById("title").innerText=title
+
+audio.src=song
+audio.play()
+
+cd.style.animationPlayState="running"
+
+/* เพิ่มวิดีโอหน้าปก */
+document.getElementById("coverVideo").src="2.mp4"
+
+}
+
+function toggle(){
+
+if(audio.paused){
+
+audio.play()
+cd.style.animationPlayState="running"
+
+}else{
+
+audio.pause()
+cd.style.animationPlayState="paused"
+
+}
+
+}
+
+audio.ontimeupdate=function(){
+progress.value=(audio.currentTime/audio.duration)*100
+}
+
+progress.oninput=function(){
+audio.currentTime=(progress.value/100)*audio.duration
+}
+
+function volume(v){
+audio.volume=v
+}
+
+function back(){
+audio.pause()
+document.getElementById("playerPage").style.display="none"
+cd.style.animationPlayState="paused"
+}
+
+/* bubbles */
+
+function bubble(){
+
+let b=document.createElement("div")
+
+b.className="bubble"
+
+b.style.left=Math.random()*window.innerWidth+"px"
+
+b.style.animationDuration=4+Math.random()*3+"s"
+
+document.body.appendChild(b)
+
+setTimeout(()=>{
+b.remove()
+},7000)
+
+}
+
+setInterval(bubble,400)
+
+</script>
+
+</body>
+</html>

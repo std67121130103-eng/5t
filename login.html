@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ocean Login</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:sans-serif;
+}
+
+body{
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+background:#001a2d;
+}
+
+/* วิดีโอพื้นหลัง */
+
+.bg-video{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-2;
+}
+
+/* overlay */
+
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.35);
+z-index:-1;
+}
+
+/* ฟองอากาศ */
+
+.bubble{
+position:absolute;
+bottom:-40px;
+width:12px;
+height:12px;
+border-radius:50%;
+background:white;
+opacity:0.8;
+animation:bubbleUp linear forwards;
+}
+
+@keyframes bubbleUp{
+0%{transform:translateY(0)}
+100%{transform:translateY(-110vh)}
+}
+
+/* ปลา */
+
+.fish{
+position:absolute;
+top:35%;
+left:-100px;
+font-size:30px;
+animation:fishSwim 18s linear infinite;
+}
+
+@keyframes fishSwim{
+0%{left:-100px}
+100%{left:110%}
+}
+
+/* ปลาหมึก */
+
+.octopus{
+position:absolute;
+bottom:15%;
+right:-200px;
+font-size:70px;
+filter:drop-shadow(0 0 20px cyan);
+animation:octoSwim 25s linear infinite;
+}
+
+@keyframes octoSwim{
+0%{right:-200px}
+100%{right:110%}
+}
+
+/* กล่อง login */
+
+.login-box{
+
+width:380px;
+padding:45px;
+text-align:center;
+
+background:rgba(255,255,255,0.15);
+
+border-radius:25px;
+
+backdrop-filter:blur(15px);
+
+border:1px solid rgba(255,255,255,0.3);
+
+box-shadow:
+0 0 40px rgba(0,200,255,0.4),
+inset 0 0 20px rgba(255,255,255,0.3);
+
+animation:floatBox 6s ease-in-out infinite;
+}
+
+@keyframes floatBox{
+0%{transform:translateY(0)}
+50%{transform:translateY(-12px)}
+100%{transform:translateY(0)}
+}
+
+h1{
+font-size:38px;
+margin-bottom:25px;
+text-shadow:0 0 15px cyan;
+}
+
+input{
+width:100%;
+padding:14px;
+margin:10px 0;
+border:none;
+border-radius:25px;
+outline:none;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:15px;
+
+border:none;
+border-radius:25px;
+
+background:linear-gradient(45deg,#00eaff,#008cff);
+
+color:white;
+font-size:18px;
+cursor:pointer;
+
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.05);
+box-shadow:0 0 15px cyan;
+}
+
+/* เอฟเฟกเปลี่ยนหน้า */
+
+.transition{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+
+background:#001a2d;
+
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+
+opacity:0;
+pointer-events:none;
+
+z-index:100;
+
+}
+
+.transition.active{
+opacity:1;
+animation:dive 2.5s forwards;
+}
+
+@keyframes dive{
+0%{transform:scale(1)}
+100%{transform:scale(1.15) translateY(120px)}
+}
+
+/* ฟองตอนโหลด */
+
+.t-bubble{
+
+position:absolute;
+bottom:-20px;
+
+width:14px;
+height:14px;
+
+background:white;
+
+border-radius:50%;
+
+opacity:0.9;
+
+animation:tBubble 3s linear infinite;
+
+}
+
+@keyframes tBubble{
+0%{transform:translateY(0)}
+100%{transform:translateY(-120vh)}
+}
+
+/* วาฬตอนเปลี่ยนหน้า */
+
+.t-whale{
+
+position:absolute;
+top:50%;
+left:-300px;
+
+font-size:120px;
+
+animation:whaleSwim 5s linear forwards;
+
+}
+
+</style>
+</head>
+
+<body>
+
+<video class="bg-video" autoplay muted loop playsinline>
+<source src="1.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<div class="fish">🐟🐟🐟🐟🐟</div>
+
+<div class="octopus">🐙</div>
+
+<div class="login-box">
+
+<h1>🔐 Login</h1>
+
+<input type="text" placeholder="Username">
+
+<input type="password" placeholder="Password">
+
+<button onclick="login()">เข้าสู่ระบบ</button>
+
+</div>
+
+<!-- เอฟเฟกตอนเปลี่ยนหน้า -->
+
+<div class="transition" id="transition">
+
+<div class="t-whale">🐳</div>
+
+<h1>กำลังเข้าสู่โลกใต้ทะเล...</h1>
+
+</div>
+
+<script>
+
+/* ฟองพื้นหลัง */
+
+function bubble(){
+
+let b=document.createElement("div");
+
+b.className="bubble";
+
+b.style.left=Math.random()*window.innerWidth+"px";
+b.style.animationDuration=4+Math.random()*3+"s";
+
+document.body.appendChild(b);
+
+setTimeout(()=>{
+b.remove();
+},7000);
+
+}
+
+setInterval(bubble,400);
+
+/* login */
+
+function login(){
+
+let t=document.getElementById("transition");
+
+t.classList.add("active");
+
+/* ฟองตอนเปลี่ยนหน้า */
+
+for(let i=0;i<80;i++){
+
+let b=document.createElement("div");
+
+b.className="t-bubble";
+
+b.style.left=Math.random()*window.innerWidth+"px";
+b.style.animationDuration=(2+Math.random()*2)+"s";
+
+t.appendChild(b);
+
+}
+
+/* ไปหน้า home */
+
+setTimeout(()=>{
+window.location.href="home.html";
+},2500);
+
+}
+
+</script>
+
+</body>
+</html>
