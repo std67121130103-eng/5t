@@ -1,0 +1,293 @@
+```html
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ท้องทะเลนี้เป็นของหนูคนเดียว🐟</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:sans-serif;
+}
+
+body{
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+transition:transform 2s ease, filter 2s ease;
+}
+
+/* เอฟเฟกต์ดำน้ำ */
+
+body.dive{
+transform:scale(1.4) translateY(-150px);
+filter:blur(6px) brightness(0.6);
+}
+
+/* วิดีโอพื้นหลัง */
+
+video{
+position:fixed;
+right:0;
+bottom:0;
+min-width:100%;
+min-height:100%;
+object-fit:cover;
+z-index:-10;
+}
+
+/* แสงทะเล */
+
+.glow{
+position:absolute;
+width:100%;
+height:100%;
+background:radial-gradient(circle at 50% 0%,rgba(0,200,255,0.4),transparent);
+animation:glowMove 8s infinite alternate;
+z-index:-5;
+}
+
+@keyframes glowMove{
+0%{transform:translateY(-20px)}
+100%{transform:translateY(20px)}
+}
+
+/* ฟองอากาศ */
+
+.bubble{
+position:absolute;
+width:15px;
+height:15px;
+border-radius:50%;
+background:rgba(255,255,255,0.7);
+box-shadow:0 0 10px white;
+pointer-events:none;
+animation:bubbleUp 6s linear forwards;
+}
+
+@keyframes bubbleUp{
+0%{transform:translateY(0) scale(0.5);opacity:1}
+100%{transform:translateY(-200px) scale(1.5);opacity:0}
+}
+
+/* วาฬ */
+
+.whale{
+position:absolute;
+top:55%;
+left:-300px;
+font-size:100px;
+animation:whaleSwim 25s linear infinite;
+}
+
+.whale2{
+position:absolute;
+top:35%;
+left:-400px;
+font-size:80px;
+animation:whaleSwim 18s linear infinite;
+opacity:0.8;
+}
+
+@keyframes whaleSwim{
+0%{left:-400px}
+100%{left:110%}
+}
+
+/* ปลาหมึก */
+
+.octopus{
+position:absolute;
+top:70%;
+right:-200px;
+font-size:70px;
+animation:octoSwim 30s linear infinite;
+filter:drop-shadow(0 0 20px cyan);
+}
+
+@keyframes octoSwim{
+0%{right:-200px}
+100%{right:110%}
+}
+
+/* ฝูงปลา */
+
+.fish{
+position:absolute;
+top:40%;
+left:-150px;
+font-size:30px;
+animation:fishSwim 22s linear infinite;
+}
+
+@keyframes fishSwim{
+0%{left:-150px}
+100%{left:110%}
+}
+
+/* กล่องโหลด */
+
+.loader-box{
+padding:50px;
+width:350px;
+text-align:center;
+
+background:rgba(255,255,255,0.15);
+border-radius:25px;
+
+backdrop-filter:blur(15px);
+border:1px solid rgba(255,255,255,0.3);
+
+box-shadow:
+0 0 40px rgba(0,200,255,0.4),
+inset 0 0 20px rgba(255,255,255,0.2);
+}
+
+/* ข้อความ */
+
+h1{
+font-size:40px;
+margin-bottom:20px;
+text-shadow:0 0 15px cyan;
+}
+
+/* loading bar */
+
+.bar{
+width:100%;
+height:10px;
+background:rgba(255,255,255,0.3);
+border-radius:20px;
+overflow:hidden;
+}
+
+.progress{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#00f2ff,#00a6ff);
+animation:load 5s linear forwards;
+}
+
+@keyframes load{
+0%{width:0}
+100%{width:100%}
+}
+
+/* คลื่นทะเล */
+
+.wave{
+position:absolute;
+bottom:0;
+width:200%;
+height:140px;
+background:linear-gradient(to top,rgba(0,120,255,0.7),transparent);
+border-radius:100% 100% 0 0;
+animation:waveMove 6s infinite ease-in-out;
+}
+
+@keyframes waveMove{
+0%{transform:translateX(0)}
+50%{transform:translateX(-25%)}
+100%{transform:translateX(0)}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- วิดีโอพื้นหลัง -->
+
+<video autoplay muted loop>
+<source src="sea.mp4" type="video/mp4">
+</video>
+
+<div class="glow"></div>
+
+<div class="whale">🐳</div>
+<div class="whale2">🐳</div>
+
+<div class="octopus">🐙</div>
+
+<div class="fish">🐟🐟🐟🐟🐟</div>
+
+<div class="loader-box">
+
+<h1>🌊 ท้องทะเลนี้เป็นของหนูคนเดียว🐟</h1>
+
+<div class="bar">
+<div class="progress"></div>
+</div>
+
+<p style="margin-top:20px;">กำลังเข้าสู่โลกใต้ทะเล...</p>
+
+</div>
+
+<div class="wave"></div>
+
+<script>
+
+/* ฟองอากาศตามเมาส์ */
+
+document.addEventListener("mousemove",function(e){
+
+let bubble=document.createElement("div");
+bubble.className="bubble";
+
+bubble.style.left=e.clientX+"px";
+bubble.style.top=e.clientY+"px";
+
+document.body.appendChild(bubble);
+
+setTimeout(()=>{
+bubble.remove();
+},6000);
+
+});
+
+/* ฟองอากาศเต็มจอ */
+
+setInterval(()=>{
+
+let bubble=document.createElement("div");
+bubble.className="bubble";
+
+bubble.style.left=Math.random()*window.innerWidth+"px";
+bubble.style.bottom="-20px";
+
+document.body.appendChild(bubble);
+
+setTimeout(()=>{
+bubble.remove();
+},6000);
+
+},200);
+
+/* เอฟเฟกต์ดำน้ำก่อนเปลี่ยนหน้า */
+
+setTimeout(()=>{
+
+document.body.classList.add("dive");
+
+},3500);
+
+/* ไปหน้าอื่น */
+
+setTimeout(()=>{
+window.location.href="login.html";
+},5500);
+
+</script>
+
+</body>
+</html>
+```
